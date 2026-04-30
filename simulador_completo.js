@@ -19,12 +19,12 @@ function mostrarSeccion(id) {
 }
 
 function guardarTasa() {
-  const inputTasa = parseInt(document.getElementById('tasaInteres').value);
+  const inputTasa = recuperarInt('tasaInteres');
 
-  if (inputTasa < 10 || inputTasa > 20 || isNaN(inputTasa)) {
-    alert('El valor tiene que estar entre 10 y 20');
-    return;
+  if (inputTasa > 10 && inputTasa < 20) {
+    tasaInteres = inputTasa;
+    mostrarTexto('mensajeTasa', `✔ Tasa configurada correctamente: ${inputTasa}%`);
+  } else {
+    mostrarTexto('mensajeTasa', '❌ La tasa debe estar entre 10% y 20%');
   }
-
-  tasaInteres = inputTasa;
 }
