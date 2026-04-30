@@ -17,3 +17,14 @@ function mostrarSeccion(id) {
   document.getElementById(id).classList.add('activa');
   document.getElementById(id).classList.add('activa');
 }
+
+function guardarTasa() {
+  const inputTasa = parseInt(document.getElementById('tasaInteres').value);
+
+  if (inputTasa < 10 || inputTasa > 20 || isNaN(inputTasa)) {
+    alert('El valor tiene que estar entre 10 y 20');
+    return;
+  }
+
+  tasaInteres = inputTasa;
+}
