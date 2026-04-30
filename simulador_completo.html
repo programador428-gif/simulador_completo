@@ -1,61 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Sistema de Créditos</title>
 </head>
+
 <body>
 
-<header>
-  <h1>Sistema Básico de Créditos</h1>
-   <link rel="stylesheet" href="simulador_completo.css">
-</header>
+  <header>
+    <h1>Sistema Básico de Créditos</h1>
+    <link rel="stylesheet" href="simulador_completo.css">
+  </header>
 
-<nav>
-  <button>Parámetros</button>
-  <button>Clientes</button>
-</nav>
+  <nav>
+    <button>Parámetros</button>
+    <button>Clientes</button>
+  </nav>
 
-<section id="parametros">
-  <h2>Configurar Parámetros</h2>
+  <section id="parametros">
+    <h2>Configurar Parámetros</h2>
 
-  <label>Tasa de interés:</label>
-  <input type="number" id="tasaInteres">
-  <span>%</span>
+    <label>Tasa de interés:</label>
+    <input type="number" id="tasaInteres">
+    <span>%</span>
 
-  <br>
-  <button>Guardar tasa</button>
+    <br>
+    <button>Guardar tasa</button>
 
-  <p id="mensajeTasa"></p>
-</section>
+    <p id="mensajeTasa"></p>
+  </section>
 
-<section id="clientes">
-  <h2>Registro de Clientes</h2>
+  <section id="clientes">
+    <h2>Registro de Clientes</h2>
 
-  <input type="text" >
-  <input type="text" >
-  <input type="text" >
-  <input type="number" >
-  <input type="number" >
+    <input type="text">
+    <input type="text">
+    <input type="text">
+    <input type="number">
+    <input type="number">
 
-  <br>
+    <br>
 
-  <button >Guardar cliente</button>
-  <button >Limpiar</button>
+    <button>Guardar cliente</button>
+    <button>Limpiar</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Cédula</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Ingresos</th>
-        <th>Egresos</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="tablaClientes">
-       <tr>
+    <table>
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Ingresos</th>
+          <th>Egresos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaClientes">
+        <tr>
           <td>1712345678</td>
           <td>Juan</td>
           <td>Pérez</td>
@@ -88,13 +90,14 @@
             <button>Eliminar</button>
           </td>
         </tr>
-    </tbody>
-  </table>
-</section>
+      </tbody>
+    </table>
+  </section>
 
 
 
-<script src="simulador_completo.js"></script>
-<script src="utilitarios.js"></script>
+  <script src="simulador_completo.js"></script>
+  <script src="utilitarios.js"></script>
 </body>
+
 </html>
