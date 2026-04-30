@@ -12,3 +12,8 @@ function ocultarSecciones() {
   document.getElementById('parametros').classList.remove('activa');
   document.getElementById('clientes').classList.remove('activa');
 }
+
+function mostrarSeccion(id) {
+  document.getElementById(id).classList.add('activa');
+  document.getElementById(id).classList.add('activa');
+}
