@@ -1,4 +1,9 @@
-let clientes = [];
+const tablaClientes = document.getElementById("tablaClientes");
+const clientes = [
+  { cedula: 1712345678, nombre: "Juan", apellido: "Pérez", ingresos: 1200, egresos: 500 },
+  { cedula: 1723456789, nombre: "María", apellido: "Gómez", ingresos: 1500, egresos: 600 },
+  { cedula: 1734567890, nombre: "Carlos", apellido: "Ramírez", ingresos: 900, egresos: 350 }
+];
 let creditos = [];
 
 let tasaInteres = 15;
@@ -39,4 +44,27 @@ function guardarCliente() {
   }
 
   clientes.push(cliente);
+  pintarClientes();
 }
+
+function pintarClientes() {
+  let contenido = "";
+  clientes.forEach(e => {
+    contenido += `
+      <tr>
+        <td>${e.cedula}</td>
+        <td>${e.nombre}</td>
+        <td>${e.apellido}</td>
+        <td>${e.ingresos}</td>
+        <td>${e.egresos}</td>
+        <td>
+          <button>Actualizar</button>
+          <button>Eliminar</button>
+        </td>
+      </tr>
+    `;
+  });
+  tablaClientes.innerHTML = contenido;
+}
+
+pintarClientes();
