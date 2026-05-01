@@ -13,6 +13,12 @@ let montoCalculado = 0;
 let plazoCalculado = 0;
 let creditoAprobado = false;
 
+
+function buscarCliente(cedula) {
+  const encontrado = clientes.find(c => c.cedula == cedula);
+  return encontrado ? encontrado : null;
+}
+
 function ocultarSecciones() {
   document.getElementById('parametros').classList.remove('activa');
   document.getElementById('clientes').classList.remove('activa');
@@ -34,19 +40,6 @@ function guardarTasa() {
   }
 }
 
-function guardarCliente() {
-  const cliente = {
-    cedula: recuperarInt("cedula"),
-    nombre: recuperarTexto("nombre"),
-    apellido: recuperarTexto("apellido"),
-    ingresos: recuperarInt("ingresos"),
-    egresos: recuperarInt("egresos")
-  }
-
-  clientes.push(cliente);
-  pintarClientes();
-}
-
 function pintarClientes() {
   let contenido = "";
   clientes.forEach(e => {
@@ -58,13 +51,68 @@ function pintarClientes() {
         <td>${e.ingresos}</td>
         <td>${e.egresos}</td>
         <td>
-          <button>Actualizar</button>
-          <button>Eliminar</button>
+          <button onclick="seleccionarCliente('${e.cedula}')">Actualizar</button>
         </td>
       </tr>
     `;
   });
   tablaClientes.innerHTML = contenido;
+}
+
+function seleccionarCliente(cedula) {
+  clienteSeleccionado = buscarCliente(cedula);
+
+  if (clienteSeleccionado === null) {
+    return alert(`No existe ningún cliente con la cédula: ${cedula}`);
+  }
+
+  mostrarTextoEnCaja("cedula", clienteSeleccionado.cedula);
+  mostrarTextoEnCaja("nombre", clienteSeleccionado.nombre);
+  mostrarTextoEnCaja("apellido", clienteSeleccionado.apellido);
+  mostrarTextoEnCaja("ingresos", clienteSeleccionado.ingresos);
+  mostrarTextoEnCaja("egresos", clienteSeleccionado.egresos);
+}
+
+function guardarCliente() {
+  const infoCliente = {
+    cedula: recuperarInt("cedula"),
+    nombre: recuperarTexto("nombre"),
+    apellido: recuperarTexto("apellido"),
+    ingresos: recuperarInt("ingresos"),
+    egresos: recuperarInt("egresos")
+  };
+  const valores = Object.values(infoCliente);
+
+  const tieneErrores = valores.some(e => Number.isNaN(e) || e === "");
+
+  if (tieneErrores) {
+    return alert("Rellene todos los campos correctamente.");
+  }
+
+  const existe = buscarCliente(infoCliente.cedula);
+
+  if (existe === null) {
+    clientes.push(infoCliente);
+    alert("Cliente creado con éxito");
+  } else {
+    existe.nombre = infoCliente.nombre;
+    existe.apellido = infoCliente.apellido;
+    existe.ingresos = infoCliente.ingresos;
+    existe.egresos = infoCliente.egresos;
+    alert("Cliente actualizado con éxito");
+  }
+
+  pintarClientes();
+  limpiar();
+}
+
+function limpiar() {
+  mostrarTextoEnCaja("cedula", "");
+  mostrarTextoEnCaja("nombre", "");
+  mostrarTextoEnCaja("apellido", "");
+  mostrarTextoEnCaja("ingresos", "");
+  mostrarTextoEnCaja("egresos", "");
+  clienteSeleccionado = null;
 }
 
 pintarClientes();

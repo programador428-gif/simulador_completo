@@ -43,7 +43,8 @@
     <br>
 
     <button onclick="guardarCliente()">Guardar cliente</button>
-    <button>Limpiar</button>
+    <button onclick="seleccionarCliente(document.getElementById('cedula').value)">Buscar cliente</button>
+    <button onclick="limpiar()">Limpiar</button>
 
     <table>
       <thead>
@@ -59,8 +60,6 @@
       <tbody id="tablaClientes"></tbody>
     </table>
   </section>
-
-
 
   <script src="simulador_completo.js"></script>
   <script src="utilitarios.js"></script>
