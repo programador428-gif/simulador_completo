@@ -52,6 +52,7 @@ function pintarClientes() {
         <td>${e.egresos}</td>
         <td>
           <button onclick="seleccionarCliente('${e.cedula}')">Actualizar</button>
+          <button>Eliminar</button>
         </td>
       </tr>
     `;
