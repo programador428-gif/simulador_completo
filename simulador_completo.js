@@ -213,7 +213,11 @@ function calcularCredito() {
     let creditoPosible = analizarCredito(capacidad, cuotaMensual);
     const mensajeFinal = aprobarCredito(creditoPosible);
 
-    document.getElementById("resultadoCredito").innerHTML = `
+    const contenedorResultado = document.getElementById("resultadoCredito");
+
+    contenedorResultado.className = creditoPosible ? "aprobado" : "rechazado";
+
+    contenedorResultado.innerHTML = `
       <strong>Capacidad de pago:</strong> $${capacidad.toLocaleString()} <br>
       <strong>Total a pagar:</strong> $${totalPagar.toLocaleString()} <br>
       <strong>Cuota mensual:</strong> $${cuotaMensual.toLocaleString()} <br>
