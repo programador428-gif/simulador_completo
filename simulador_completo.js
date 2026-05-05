@@ -116,4 +116,27 @@ function limpiar() {
   clienteSeleccionado = null;
 }
 
+function buscarClienteCredito() {
+  const cedula = recuperarInt("buscarCedulaCredito");
+  const cliente_existe = buscarCliente(cedula);
+
+  if (isNaN(cedula)) {
+    return alert("Rellene el campo correctamente.");
+  }
+
+  if (cliente_existe === null) {
+    alert('No existe ningún cliente con esa cedula');
+    return;
+  }
+
+  document.getElementById("datosClienteCredito").innerHTML = `
+      <h2>Datos del Cliente</h2>
+      <p>Cedula: ${cliente_existe.cedula}</p>
+      <p>Nombre: ${cliente_existe.nombre}</p>
+      <p>Apellido: ${cliente_existe.apellido}</p>
+      <p>Ingresos: ${cliente_existe.ingresos}</p>
+      <p>Egresos: ${cliente_existe.egresos}</p>
+    `;
+}
+
 pintarClientes();
