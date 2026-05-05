@@ -12,7 +12,26 @@ let cuotaCalculada = 0;
 let montoCalculado = 0;
 let plazoCalculado = 0;
 let creditoAprobado = false;
+let cliente_existe = "";
 
+function mostrarError(idInput, mensaje) {
+  const input = document.getElementById(idInput);
+  if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-msg")) {
+    const errorSpan = document.createElement("span");
+    errorSpan.className = "error-msg";
+    errorSpan.textContent = mensaje;
+    errorSpan.style.cssText = "color: #dc3545; font-size: 12px; display: block; margin-top: -15px; margin-bottom: 15px; font-weight: 500;";
+    input.insertAdjacentElement("afterend", errorSpan);
+    input.style.borderColor = "#dc3545";
+  }
+}
+
+function limpiarErrores() {
+  const errores = document.querySelectorAll(".error-msg");
+  errores.forEach(error => error.remove());
+  const inputs = document.querySelectorAll("input");
+  inputs.forEach(input => input.style.borderColor = "");
+}
 
 function buscarCliente(cedula) {
   const encontrado = clientes.find(c => c.cedula == cedula);
@@ -118,7 +137,7 @@ function limpiar() {
 
 function buscarClienteCredito() {
   const cedula = recuperarInt("buscarCedulaCredito");
-  const cliente_existe = buscarCliente(cedula);
+  cliente_existe = buscarCliente(cedula);
 
   if (isNaN(cedula)) {
     return alert("Rellene el campo correctamente.");
@@ -137,6 +156,70 @@ function buscarClienteCredito() {
       <p>Ingresos: ${cliente_existe.ingresos}</p>
       <p>Egresos: ${cliente_existe.egresos}</p>
     `;
+}
+
+function calcularCredito() {
+  limpiarErrores();
+  let validacionExitosa = true;
+
+  const txtMonto = document.getElementById("montoCredito").value.trim();
+  const txtPlazo = document.getElementById("plazoCredito").value.trim();
+
+  if (txtMonto === "") {
+    mostrarError("montoCredito", "Este campo es obligatorio.");
+    validacionExitosa = false;
+  }
+
+  if (txtPlazo === "") {
+    mostrarError("plazoCredito", "Este campo es obligatorio.");
+    validacionExitosa = false;
+  }
+
+  if (!validacionExitosa) return;
+  const MONTO_CREDITO = parseFloat(txtMonto);
+  const PLAZO_CREDITO = parseInt(txtPlazo);
+
+  if (isNaN(MONTO_CREDITO) || MONTO_CREDITO <= 0) {
+    mostrarError("montoCredito", "El monto debe ser mayor a 0.");
+    validacionExitosa = false;
+  } else if (MONTO_CREDITO > 50000) {
+    mostrarError("montoCredito", "El monto no puede superar los $50,000.");
+    validacionExitosa = false;
+  }
+
+  if (isNaN(PLAZO_CREDITO) || PLAZO_CREDITO <= 0) {
+    mostrarError("plazoCredito", "El plazo debe ser al menos 1 año.");
+    validacionExitosa = false;
+  } else if (PLAZO_CREDITO > 10) {
+    mostrarError("plazoCredito", "El plazo máximo es de 10 años.");
+    validacionExitosa = false;
+  }
+
+  if (validacionExitosa) {
+    if (!cliente_existe) {
+      return alert("Por favor, busque y seleccione un cliente primero.");
+    }
+
+    const ingresos = parseFloat(cliente_existe.ingresos);
+    const egresos = parseFloat(cliente_existe.egresos);
+    const tasa = parseFloat(tasaInteres);
+
+    let disponible = calcularDisponible(ingresos, egresos);
+    let capacidad = calcularCapacidadPago(disponible);
+    let interesSimple = calcularInteresSimple(MONTO_CREDITO, tasa, PLAZO_CREDITO);
+    let totalPagar = calcularTotalPagar(MONTO_CREDITO, interesSimple);
+    let cuotaMensual = parseFloat(calcularCuotaMensual(totalPagar, PLAZO_CREDITO));
+
+    let creditoPosible = analizarCredito(capacidad, cuotaMensual);
+    const mensajeFinal = aprobarCredito(creditoPosible);
+
+    document.getElementById("resultadoCredito").innerHTML = `
+      <strong>Capacidad de pago:</strong> $${capacidad.toLocaleString()} <br>
+      <strong>Total a pagar:</strong> $${totalPagar.toLocaleString()} <br>
+      <strong>Cuota mensual:</strong> $${cuotaMensual.toLocaleString()} <br>
+      <strong>Resultado:</strong> ${mensajeFinal}
+    `;
+  }
 }
 
 pintarClientes();
