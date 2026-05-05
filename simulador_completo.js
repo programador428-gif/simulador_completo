@@ -9,7 +9,7 @@ let creditos = [];
 let tasaInteres = 15;
 let clienteSeleccionado = null;
 let cuotaCalculada = 0;
-let montoCalculado = 0;
+let montoCalculated = 0;
 let plazoCalculado = 0;
 let creditoAprobado = false;
 let cliente_existe = "";
@@ -41,10 +41,11 @@ function buscarCliente(cedula) {
 function ocultarSecciones() {
   document.getElementById('parametros').classList.remove('activa');
   document.getElementById('clientes').classList.remove('activa');
+  document.getElementById('creditos').classList.remove('activa');
 }
 
 function mostrarSeccion(id) {
-  document.getElementById(id).classList.add('activa');
+  ocultarSecciones();
   document.getElementById(id).classList.add('activa');
 }
 
