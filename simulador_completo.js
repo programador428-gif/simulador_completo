@@ -12,7 +12,7 @@ let cuotaCalculada = 0;
 let montoCalculated = 0;
 let plazoCalculado = 0;
 let creditoAprobado = false;
-let cliente_existe = "";
+let cliente_existe = null;
 
 function mostrarError(idInput, mensaje) {
   const input = document.getElementById(idInput);
@@ -49,6 +49,7 @@ function mostrarSeccion(id) {
 }
 
 function guardarTasa() {
+  limpiarErrores();
   const inputTasa = recuperarInt('tasaInteres');
 
   if (isNaN(inputTasa)) {
@@ -84,6 +85,7 @@ function pintarClientes() {
 }
 
 function seleccionarCliente(cedula) {
+  limpiarErrores();
   clienteSeleccionado = buscarCliente(cedula);
 
   if (clienteSeleccionado === null) {
@@ -149,41 +151,18 @@ function guardarCliente() {
 }
 
 function buscarClienteCredito() {
-  const cedula = recuperarInt("buscarCedulaCredito");
-
-  if (isNaN(cedula)) {
-    mostrarError("buscarCedulaCredito", "Rellene el campo correctamente.");
-    return;
-  }
-
-  cliente_existe = buscarCliente(cedula);
-
-  if (cliente_existe === null) {
-    alert('No existe ningún cliente con esa cedula');
-    return;
-  }
-}
-
-function limpiar() {
-  mostrarTextoEnCaja("cedula", "");
-  mostrarTextoEnCaja("nombre", "");
-  mostrarTextoEnCaja("apellido", "");
-  mostrarTextoEnCaja("ingresos", "");
-  mostrarTextoEnCaja("egresos", "");
   limpiarErrores();
-  clienteSeleccionado = null;
-}
-
-function buscarClienteCredito() {
   const cedula = recuperarInt("buscarCedulaCredito");
-  cliente_existe = buscarCliente(cedula);
 
   if (isNaN(cedula)) {
     return mostrarError("buscarCedulaCredito", "Rellene el campo correctamente.");
   }
 
+  cliente_existe = buscarCliente(cedula);
+
   if (cliente_existe === null) {
     alert('No existe ningún cliente con esa cedula');
+    document.getElementById("datosClienteCredito").innerHTML = "";
     return;
   }
 
@@ -197,6 +176,16 @@ function buscarClienteCredito() {
     `;
 }
 
+function limpiar() {
+  mostrarTextoEnCaja("cedula", "");
+  mostrarTextoEnCaja("nombre", "");
+  mostrarTextoEnCaja("apellido", "");
+  mostrarTextoEnCaja("ingresos", "");
+  mostrarTextoEnCaja("egresos", "");
+  limpiarErrores();
+  clienteSeleccionado = null;
+}
+
 function calcularCredito() {
   limpiarErrores();
   let validacionExitosa = true;
@@ -208,7 +197,6 @@ function calcularCredito() {
     mostrarError("montoCredito", "Este campo es obligatorio.");
     validacionExitosa = false;
   }
-
   if (txtPlazo === "") {
     mostrarError("plazoCredito", "Este campo es obligatorio.");
     validacionExitosa = false;
@@ -235,41 +223,41 @@ function calcularCredito() {
     validacionExitosa = false;
   }
 
-  if (validacionExitosa) {
-    if (!cliente_existe) {
-      return alert("Por favor, busque y seleccione un cliente primero.");
-    }
+  if (!validacionExitosa) return;
 
-    const ingresos = parseFloat(cliente_existe.ingresos);
-    const egresos = parseFloat(cliente_existe.egresos);
-    const tasa = parseFloat(tasaInteres);
-
-    let disponible = calcularDisponible(ingresos, egresos);
-    let capacidad = calcularCapacidadPago(disponible);
-    let interesSimple = calcularInteresSimple(MONTO_CREDITO, tasa, PLAZO_CREDITO);
-    let totalPagar = calcularTotalPagar(MONTO_CREDITO, interesSimple);
-    let cuotaMensual = parseFloat(calcularCuotaMensual(totalPagar, PLAZO_CREDITO));
-
-    let creditoPosible = analizarCredito(capacidad, cuotaMensual);
-    const mensajeFinal = aprobarCredito(creditoPosible);
-
-    const contenedorResultado = document.getElementById("resultadoCredito");
-    const btnSolicitar = document.getElementById("btnSolicitarCredito");
-
-    contenedorResultado.className = creditoPosible ? "aprobado" : "rechazado";
-    if (creditoPosible) {
-      btnSolicitar.removeAttribute("disabled");
-    } else {
-      btnSolicitar.setAttribute("disabled", "true");
-    }
-
-    contenedorResultado.innerHTML = `
-      <strong>Capacidad de pago:</strong> $${capacidad.toLocaleString()} <br>
-      <strong>Total a pagar:</strong> $${totalPagar.toLocaleString()} <br>
-      <strong>Cuota mensual:</strong> $${cuotaMensual.toLocaleString()} <br>
-      <strong>Resultado:</strong> ${mensajeFinal}
-    `;
+  if (!cliente_existe) {
+    return alert("Por favor, busque y seleccione un cliente primero.");
   }
+
+  const ingresos = parseFloat(cliente_existe.ingresos);
+  const egresos = parseFloat(cliente_existe.egresos);
+  const tasa = parseFloat(tasaInteres);
+
+  let disponible = calcularDisponible(ingresos, egresos);
+  let capacidad = calcularCapacidadPago(disponible);
+  let interesSimple = calcularInteresSimple(MONTO_CREDITO, tasa, PLAZO_CREDITO);
+  let totalPagar = calcularTotalPagar(MONTO_CREDITO, interesSimple);
+  let cuotaMensual = parseFloat(calcularCuotaMensual(totalPagar, PLAZO_CREDITO));
+
+  let creditoPosible = analizarCredito(capacidad, cuotaMensual);
+  const mensajeFinal = aprobarCredito(creditoPosible);
+
+  const contenedorResultado = document.getElementById("resultadoCredito");
+  const btnSolicitar = document.getElementById("btnSolicitarCredito");
+
+  contenedorResultado.className = creditoPosible ? "aprobado" : "rechazado";
+  if (creditoPosible) {
+    btnSolicitar.removeAttribute("disabled");
+  } else {
+    btnSolicitar.setAttribute("disabled", "true");
+  }
+
+  contenedorResultado.innerHTML = `
+    <strong>Capacidad de pago:</strong> $${capacidad.toLocaleString()} <br>
+    <strong>Total a pagar:</strong> $${totalPagar.toLocaleString()} <br>
+    <strong>Cuota mensual:</strong> $${cuotaMensual.toLocaleString()} <br>
+    <strong>Resultado:</strong> ${mensajeFinal}
+  `;
 }
 
 pintarClientes();
