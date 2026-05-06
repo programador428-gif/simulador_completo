@@ -51,6 +51,10 @@ function mostrarSeccion(id) {
 function guardarTasa() {
   const inputTasa = recuperarInt('tasaInteres');
 
+  if (isNaN(inputTasa)) {
+    return mostrarError("tasaInteres", "Este campo es obligatorio.");
+  }
+
   if (inputTasa > 10 && inputTasa < 20) {
     tasaInteres = inputTasa;
     mostrarTexto('mensajeTasa', `✔ Tasa configurada correctamente: ${inputTasa}%`);
@@ -106,7 +110,12 @@ function guardarCliente() {
   const tieneErrores = valores.some(e => Number.isNaN(e) || e === "");
 
   if (tieneErrores) {
-    return alert("Rellene todos los campos correctamente.");
+    mostrarError("cedula", "Este campo es obligatorio.");
+    mostrarError("nombre", "Este campo es obligatorio.");
+    mostrarError("apellido", "Este campo es obligatorio.");
+    mostrarError("ingresos", "Este campo es obligatorio.");
+    mostrarError("egresos", "Este campo es obligatorio.")
+    return;
   }
 
   const existe = buscarCliente(infoCliente.cedula);
@@ -140,7 +149,7 @@ function buscarClienteCredito() {
   cliente_existe = buscarCliente(cedula);
 
   if (isNaN(cedula)) {
-    return alert("Rellene el campo correctamente.");
+    return mostrarError("buscarCedulaCredito", "Rellene el campo correctamente.");
   }
 
   if (cliente_existe === null) {
@@ -176,6 +185,7 @@ function calcularCredito() {
   }
 
   if (!validacionExitosa) return;
+
   const MONTO_CREDITO = parseFloat(txtMonto);
   const PLAZO_CREDITO = parseInt(txtPlazo);
 
