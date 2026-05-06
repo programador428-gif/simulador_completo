@@ -20,7 +20,6 @@ function mostrarError(idInput, mensaje) {
     const errorSpan = document.createElement("span");
     errorSpan.className = "error-msg";
     errorSpan.textContent = mensaje;
-    errorSpan.style.cssText = "color: #dc3545; font-size: 12px; display: block; margin-top: -15px; margin-bottom: 15px; font-weight: 500;";
     input.insertAdjacentElement("afterend", errorSpan);
     input.style.borderColor = "#dc3545";
   }
@@ -215,8 +214,14 @@ function calcularCredito() {
     const mensajeFinal = aprobarCredito(creditoPosible);
 
     const contenedorResultado = document.getElementById("resultadoCredito");
+    const btnSolicitar = document.getElementById("btnSolicitarCredito");
 
     contenedorResultado.className = creditoPosible ? "aprobado" : "rechazado";
+    if (creditoPosible) {
+      btnSolicitar.removeAttribute("disabled");
+    } else {
+      btnSolicitar.setAttribute("disabled", "true");
+    }
 
     contenedorResultado.innerHTML = `
       <strong>Capacidad de pago:</strong> $${capacidad.toLocaleString()} <br>
