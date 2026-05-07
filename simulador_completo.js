@@ -4,7 +4,7 @@ let clientes = JSON.parse(localStorage.getItem("clientes")) || [
   { cedula: 1723456789, nombre: "María", apellido: "Gómez", ingresos: 1500, egresos: 600, correo: "maria@gmail.com" },
   { cedula: 1734567890, nombre: "Carlos", apellido: "Ramírez", ingresos: 900, egresos: 350, correo: "carlos@gmail.com" }
 ];
-let creditos = [];
+let creditos = {};
 
 let tasaInteres = 15;
 let clienteSeleccionado = null;
@@ -42,6 +42,7 @@ function ocultarSecciones() {
   document.getElementById('clientes').classList.remove('activa');
   document.getElementById('creditos').classList.remove('activa');
   document.getElementById('contacto').classList.remove('activa');
+  document.getElementById('registro').classList.remove('activa');
 }
 
 function mostrarSeccion(id) {
@@ -188,14 +189,16 @@ function buscarClienteCredito() {
     return;
   }
 
+  clienteSeleccionado = cliente_existe;
+
   document.getElementById("datosClienteCredito").innerHTML = `
       <h2>Datos del Cliente</h2>
-      <p>Cedula: ${cliente_existe.cedula}</p>
-      <p>Nombre: ${cliente_existe.nombre}</p>
-      <p>Apellido: ${cliente_existe.apellido}</p>
-      <p>Ingresos: ${cliente_existe.ingresos}</p>
-      <p>Egresos: ${cliente_existe.egresos}</p>
-      <p>Correo: ${cliente_existe.correo}</p>
+      <p>Cedula: ${clienteSeleccionado.cedula}</p>
+      <p>Nombre: ${clienteSeleccionado.nombre}</p>
+      <p>Apellido: ${clienteSeleccionado.apellido}</p>
+      <p>Ingresos: ${clienteSeleccionado.ingresos}</p>
+      <p>Egresos: ${clienteSeleccionado.egresos}</p>
+      <p>Correo: ${clienteSeleccionado.correo}</p>
     `;
 }
 
@@ -253,8 +256,8 @@ function calcularCredito() {
     return alert("Por favor, busque y seleccione un cliente primero.");
   }
 
-  const ingresos = parseFloat(cliente_existe.ingresos);
-  const egresos = parseFloat(cliente_existe.egresos);
+  const ingresos = parseFloat(clienteSeleccionado.ingresos);
+  const egresos = parseFloat(clienteSeleccionado.egresos);
   const tasa = parseFloat(tasaInteres);
 
   let disponible = calcularDisponible(ingresos, egresos);
@@ -267,13 +270,13 @@ function calcularCredito() {
   const mensajeFinal = aprobarCredito(creditoPosible);
 
   const contenedorResultado = document.getElementById("resultadoCredito");
-  const btnSolicitar = document.getElementById("btnSolicitarCredito");
+  const btnAsignar = document.getElementById("btnAsignarCredito");
 
   contenedorResultado.className = creditoPosible ? "aprobado" : "rechazado";
   if (creditoPosible) {
-    btnSolicitar.removeAttribute("disabled");
+    btnAsignar.removeAttribute("disabled");
   } else {
-    btnSolicitar.setAttribute("disabled", "true");
+    btnAsignar.setAttribute("disabled", "true");
   }
 
   contenedorResultado.innerHTML = `
@@ -302,6 +305,17 @@ function activarValidacionEnTiempoReal() {
       }
     });
   });
+}
+
+function asignarCredito() {
+  credito = {
+    cedula: clienteSeleccionado.cedula,
+    nombre: clienteSeleccionado.nombre,
+    apellido: clienteSeleccionado.apellido,
+    ingresos: clienteSeleccionado.ingresos,
+    egresos: clienteSeleccionado.egresos,
+    correo: clienteSeleccionado.correo
+  }
 }
 
 activarValidacionEnTiempoReal();
