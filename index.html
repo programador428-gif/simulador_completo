@@ -38,8 +38,9 @@
     
     <br>
     <button onclick="guardarMontoMaximo()">Guardar Monto Máximo</button>
-    
+
     <p id="mensajeTasa"></p>
+    <p id="mensajeMonto"></p>
   </section>
 
   <section id="clientes">
@@ -104,6 +105,7 @@
     <input type="text" id="buscarCedulaListado">
     <button onclick="buscarCreditosCliente()">Buscar</button>
     <button onclick="pintarCreditos(creditos)">Ver todos</button>
+    <button id="btnVIP" onclick="filtrarVIP()">Créditos VIP</button>
 
     <table>
       <thead>

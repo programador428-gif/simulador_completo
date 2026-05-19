@@ -82,7 +82,7 @@ function guardarMontoMaximo() {
   localStorage.setItem("montoMaximo", montoMaximoPermitido);
   
   montoMaximoPermitidoLocal = montoMaximoPermitido.toLocaleString();
-  mostrarTexto('mensajeTasa', `✔ Monto máximo configurado correctamente: $${montoMaximoPermitidoLocal}`);
+  mostrarTexto('mensajeMonto', `✔ Monto máximo configurado correctamente: $${montoMaximoPermitidoLocal}`);
 }
 
 function pintarClientes() {
@@ -403,6 +403,16 @@ function buscarCreditosCliente() {
 function verTodosLosCreditos() {
   document.getElementById("buscarCedulaListado").value = "";
   pintarCreditos(creditos);
+}
+
+function filtrarVIP() {
+  const listaVIP = creditos.filter(c => c.monto > 5000);
+
+  if (listaVIP.length === 0) {
+    alert("No se encontraron créditos registrados con un monto total a pagar mayor a $5,000.");
+  }
+
+  pintarCreditos(listaVIP);
 }
 
 function eliminarCredito(indice) {
