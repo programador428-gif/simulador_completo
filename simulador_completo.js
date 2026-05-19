@@ -1,9 +1,9 @@
 const tablaClientes = document.getElementById("tablaClientes");
 const tablaCreditos = document.getElementById("tablaCreditos");
 let clientes = JSON.parse(localStorage.getItem("clientes")) || [
-  { cedula: 1712345678, nombre: "Juan", apellido: "Pérez", ingresos: 1200, egresos: 500, correo: "juan@gmail.com" },
-  { cedula: 1723456789, nombre: "María", apellido: "Gómez", ingresos: 1500, egresos: 600, correo: "maria@gmail.com" },
-  { cedula: 1734567890, nombre: "Carlos", apellido: "Ramírez", ingresos: 900, egresos: 350, correo: "carlos@gmail.com" }
+  { cedula: 1712345678, nombre: "Juan", apellido: "Pérez", ingresos: 1200, egresos: 500, correo: "juan@gmail.com", telefono: "0991118822" },
+  { cedula: 1723456789, nombre: "María", apellido: "Gómez", ingresos: 1500, egresos: 600, correo: "maria@gmail.com", telefono: "0992217812" },
+  { cedula: 1734567890, nombre: "Carlos", apellido: "Ramírez", ingresos: 900, egresos: 350, correo: "carlos@gmail.com", telefono: "0999782309" }
 ];
 let creditos = JSON.parse(localStorage.getItem("creditos")) || [];
 
@@ -78,6 +78,7 @@ function pintarClientes() {
         <td>${e.apellido}</td>
         <td>${e.ingresos}</td>
         <td>${e.egresos}</td>
+        <td>${e.telefono}</td>
         <td>${e.correo}</td>
         <td>
           <button onclick="seleccionarCliente('${e.cedula}')">Actualizar</button>
@@ -102,6 +103,7 @@ function seleccionarCliente(cedula) {
   mostrarTextoEnCaja("apellido", clienteSeleccionado.apellido);
   mostrarTextoEnCaja("ingresos", clienteSeleccionado.ingresos);
   mostrarTextoEnCaja("egresos", clienteSeleccionado.egresos);
+  mostrarTextoEnCaja("telefono", clienteSeleccionado.telefono);
   mostrarTextoEnCaja("correo", clienteSeleccionado.correo);
 }
 
@@ -112,6 +114,7 @@ function guardarCliente() {
     apellido: recuperarTexto("apellido"),
     ingresos: recuperarInt("ingresos"),
     egresos: recuperarInt("egresos"),
+    telefono: recuperarTexto("telefono"),
     correo: recuperarTexto("correo")
   };
 
@@ -137,9 +140,12 @@ function guardarCliente() {
     mostrarError("egresos", "Este campo es obligatorio.");
     formularioValido = false;
   }
-
+  if (infoCliente.telefono === "") {
+    mostrarError("telefono", "Este campo es obligatorio.");
+    formularioValido = false;
+  }
   if (infoCliente.correo === "") {
-    mostrarError("correo", "Este campo es obligatorio");
+    mostrarError("correo", "Este campo es obligatorio.");
     formularioValido = false;
   }
 
@@ -155,6 +161,7 @@ function guardarCliente() {
     existe.apellido = infoCliente.apellido;
     existe.ingresos = infoCliente.ingresos;
     existe.egresos = infoCliente.egresos;
+    existe.telefono = infoCliente.telefono;
     existe.correo = infoCliente.correo;
     alert("Cliente actualizado con éxito");
   }
@@ -200,6 +207,7 @@ function buscarClienteCredito() {
       <p>Apellido: ${clienteSeleccionado.apellido}</p>
       <p>Ingresos: ${clienteSeleccionado.ingresos}</p>
       <p>Egresos: ${clienteSeleccionado.egresos}</p>
+      <p>Teléfono: ${clienteSeleccionado.telefono}</p>
       <p>Correo: ${clienteSeleccionado.correo}</p>
     `;
 }
@@ -210,6 +218,7 @@ function limpiar() {
   mostrarTextoEnCaja("apellido", "");
   mostrarTextoEnCaja("ingresos", "");
   mostrarTextoEnCaja("egresos", "");
+  mostrarTextoEnCaja("telefono", "");
   mostrarTextoEnCaja("correo", "");
   limpiarErrores();
   clienteSeleccionado = null;
